@@ -178,31 +178,43 @@
     <p class="section-label">Featured Work</p>
     <h2 class="section-title">Projects that <span style="color:var(--accent-1);">move the needle</span></h2>
     <div class="projects-grid">
-      <div class="project-card" onclick="openModal('cyclistic')">
-        <div class="project-card-top" style="background: linear-gradient(135deg, #E4F4EF 0%, #B2E8DC 100%);"><span class="card-tag tag-green">Data Analytics</span></div>
+      <!-- Cyclistic -->
+      <div class="project-card" onclick="location.href='projects/cyclistic.html'">
+        <div class="project-card-top" style="background: linear-gradient(135deg, #E4F4EF 0%, #B2E8DC 100%);">
+          <span class="card-tag tag-green">Data Analytics</span>
+          <img src="assets/images/cyclistic-cover.jpg" alt="Cyclistic" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.35;"/>
+        </div>
         <div class="project-card-body">
           <h3>Cyclistic Bike-Share</h3>
-          <p>Analyzed 258K+ trips to drive member conversion strategy.</p>
+          <p>Analyzed 258K+ trips to uncover behavioral differences and drive member conversion strategy.</p>
           <div class="project-result">78% of short rides are members</div>
-          <a class="project-link">View Full Case Study</a>
+          <a href="projects/cyclistic.html" class="project-link">View Full Case Study</a>
         </div>
       </div>
-      <div class="project-card" onclick="openModal('asian')">
-        <div class="project-card-top" style="background: linear-gradient(135deg, #D4EEF7 0%, #A8DCF0 100%);"><span class="card-tag tag-blue">Machine Learning</span></div>
+      <!-- Asian Option -->
+      <div class="project-card" onclick="location.href='projects/asian-option.html'">
+        <div class="project-card-top" style="background: linear-gradient(135deg, #D4EEF7 0%, #A8DCF0 100%);">
+          <span class="card-tag tag-blue">Machine Learning</span>
+          <img src="assets/images/ann-cover.jpg" alt="Asian Option ANN" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.35;"/>
+        </div>
         <div class="project-card-body">
           <h3>Asian Option Pricing ANN</h3>
-          <p>Neural networks for financial derivatives, 10-100x faster.</p>
-          <div class="project-result">90%+ accuracy</div>
-          <a class="project-link">View Full Case Study</a>
+          <p>Neural networks for financial derivatives pricing, 10-100x faster than Monte Carlo.</p>
+          <div class="project-result">90%+ accuracy across models</div>
+          <a href="projects/asian-option.html" class="project-link">View Full Case Study</a>
         </div>
       </div>
-      <div class="project-card" onclick="openModal('fingerprint')">
-        <div class="project-card-top" style="background: linear-gradient(135deg, #E8F8F4 0%, #C2EDDF 100%);"><span class="card-tag tag-teal">Deep Learning</span></div>
+      <!-- Fingerprint -->
+      <div class="project-card" onclick="location.href='projects/fingerprint.html'">
+        <div class="project-card-top" style="background: linear-gradient(135deg, #E8F8F4 0%, #C2EDDF 100%);">
+          <span class="card-tag tag-teal">Deep Learning / IoT</span>
+          <img src="assets/images/fingerprint-cover.jpg" alt="Fingerprint CNN" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0.35;"/>
+        </div>
         <div class="project-card-body">
           <h3>Fingerprint Door Lock CNN</h3>
-          <p>Biometric authentication with 96.72% accuracy.</p>
-          <div class="project-result">Real-time IoT ready</div>
-          <a class="project-link">View Full Case Study</a>
+          <p>CNN-based biometric authentication system achieving 96.72% accuracy on 6K fingerprints.</p>
+          <div class="project-result">Real-time IoT deployment</div>
+          <a href="projects/fingerprint.html" class="project-link">View Full Case Study</a>
         </div>
       </div>
     </div>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fingerprint Recognition CNN — Christian Jauhari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#F0F8F5;--card:#fff;--accent:#3BBFA0;--accent2:#1A9E7A;--text:#0F2D25;--muted:#6A8F84;--border:rgba(59,191,160,0.15);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;background:rgba(240,248,245,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--accent2);letter-spacing:.08em;text-decoration:none;}
+    .back-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:var(--accent2);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:0.85rem;transition:background .2s,transform .2s;}
+    .back-btn:hover{background:#0F6D50;transform:translateY(-1px);}
+    .hero{margin-top:72px;position:relative;height:420px;overflow:hidden;display:flex;align-items:flex-end;}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,40,30,0.92) 0%,rgba(10,40,30,0.4) 60%,transparent 100%);}
+    .hero-content{position:relative;z-index:1;padding:48px 60px;width:100%;}
+    .tag{display:inline-block;padding:5px 14px;background:rgba(59,191,160,0.2);border:1px solid rgba(59,191,160,0.4);border-radius:100px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#7EEFD0;margin-bottom:16px;}
+    .hero-content h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);text-transform:uppercase;letter-spacing:.03em;line-height:.95;color:#fff;margin-bottom:12px;}
+    .hero-content p{font-size:1.05rem;color:rgba(255,255,255,0.7);max-width:600px;}
+    .content{max-width:860px;margin:0 auto;padding:72px 40px;}
+    .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:64px;}
+    .stat{background:var(--card);padding:28px 20px;text-align:center;}
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--accent);display:block;line-height:1;}
+    .stat-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:6px;display:block;}
+    .section{margin-bottom:64px;}
+    .section-label{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+    h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text);margin-bottom:20px;line-height:1;}
+    p{font-size:.975rem;line-height:1.8;color:var(--muted);margin-bottom:14px;}
+    ul{margin:16px 0 16px 22px;color:var(--muted);line-height:1.85;}
+    li{margin-bottom:8px;}
+    li strong{color:var(--text);}
+    .highlight{background:linear-gradient(135deg,#E8F8F4,#D0EDE6);border-left:4px solid var(--accent);padding:24px 28px;border-radius:10px;margin:28px 0;}
+    .highlight strong{color:var(--text);font-weight:700;}
+    .img-full{width:100%;border-radius:12px;border:1px solid var(--border);margin:28px 0;display:block;}
+    .img-caption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:28px;font-style:italic;}
+    .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;}
+    .img-grid img{width:100%;border-radius:10px;border:1px solid var(--border);}
+    .img-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:28px 0;}
+    .img-grid-3 img{width:100%;border-radius:10px;border:1px solid var(--border);}
+    hr{border:none;border-top:1px solid var(--border);margin:48px 0;}
+    .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+    .tool{padding:6px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:.82rem;font-weight:500;color:var(--muted);}
+    footer{padding:40px 60px;background:#0F2D25;text-align:center;color:rgba(255,255,255,0.4);font-size:.85rem;}
+    footer a{color:#3BBFA0;text-decoration:none;}
+    @media(max-width:768px){
+      nav{padding:14px 20px;} .hero-content{padding:32px 24px;} .content{padding:48px 24px;}
+      .stats-bar{grid-template-columns:repeat(2,1fr);} .img-grid,.img-grid-3{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">CJ</a>
+  <a href="/" class="back-btn">← Back to Portfolio</a>
+</nav>
+
+<div class="hero">
+  <img src="../assets/images/fingerprint-cover.jpg" alt="Fingerprint Recognition"/>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="tag">Deep Learning / IoT</span>
+    <h1>Fingerprint Recognition<br/>using CNN for Door Lock</h1>
+    <p>A biometric authentication system achieving 96.72% accuracy — built for real-time IoT deployment.</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">96.72%</span><span class="stat-label">Accuracy</span></div>
+    <div class="stat"><span class="stat-num">6,000</span><span class="stat-label">Training Images</span></div>
+    <div class="stat"><span class="stat-num">6:29</span><span class="stat-label">Training Time</span></div>
+    <div class="stat"><span class="stat-num">&lt;100ms</span><span class="stat-label">Inference Speed</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section">
+    <p class="section-label">Overview</p>
+    <h2>Biometrics for the Physical World</h2>
+    <p>Traditional door locks rely on keys, PINs, or cards — all of which can be lost, stolen, or shared. Biometric systems offer a fundamentally more secure alternative: your body is the key.</p>
+    <p>This project (built as a team of two) proposes a CNN-based fingerprint recognition system applied to an IoT door lock. We trained on 6,000 fingerprint images from 600 individuals and achieved 96.72% classification accuracy using ADAM optimization with Binary Crossentropy loss.</p>
+    <div class="highlight">
+      <strong>Core Concept:</strong> Fingerprints have been used for identification since 1860 (Sir William James Herschel). We take that century-old biometric and pair it with modern deep learning to build a real-time, secure access control system.
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- BACKGROUND -->
+  <div class="section">
+    <p class="section-label">Background</p>
+    <h2>Fingerprints & CNN Architecture</h2>
+    <p>A biometric system is a pattern recognition system that identifies or verifies a person based on physiological characteristics. Advantages over traditional access control:</p>
+    <ul>
+      <li>More efficient — no physical key or card required</li>
+      <li>Difficult to manipulate or spoof</li>
+      <li>Stores complete access history for auditing</li>
+      <li>Inherently personal — cannot be shared or transferred</li>
+    </ul>
+    <p>Convolutional Neural Networks (CNN) were selected for this task due to their proven performance in image classification. CNNs consist of two core components:</p>
+    <ul>
+      <li><strong>Feature Detection Layers:</strong> Convolutional layers extract ridges, whorls, and loop patterns from fingerprint images; pooling reduces dimensionality while preserving key features; ReLU introduces non-linearity</li>
+      <li><strong>Classification Layer:</strong> A fully connected layer maps extracted features to binary output (match / no match)</li>
+    </ul>
+
+    <img src="../assets/images/fingerprint-layer.png" alt="CNN Architecture" class="img-full"/>
+    <p class="img-caption">CNN model architecture — feature extraction layers and classification layer</p>
+  </div>
+
+  <hr/>
+
+  <!-- DATA -->
+  <div class="section">
+    <p class="section-label">Methodology</p>
+    <h2>Dataset & Preprocessing</h2>
+    <p>We used the <strong>Sokoto Coventry Fingerprint Dataset (SOCOFing)</strong> — an academic fingerprint database with 6,000 images from 600 individuals. Each image is annotated with gender, hand (left/right), and finger position (thumb through pinky), plus a modified version for variation.</p>
+
+    <img src="../assets/images/fingerprint-data-sample.jpg" alt="Fingerprint Data Samples" class="img-full"/>
+    <p class="img-caption">Sample fingerprint images from the SOCOFing dataset used for training</p>
+
+    <h2>Augmentation Pipeline</h2>
+    <p>Raw fingerprint images were processed through the following steps before training:</p>
+    <ul>
+      <li><strong>Grayscale Conversion:</strong> RGB (3 channels) → single grayscale channel to reduce model complexity</li>
+      <li><strong>Normalization:</strong> Pixel values scaled to [0, 1]</li>
+      <li><strong>Augmentation</strong> to simulate real-world variations:
+        <ul>
+          <li>Blurring (simulates imperfect sensor capture)</li>
+          <li>Random rotation up to ±30° (varying finger angles)</li>
+          <li>Scale changes (different pressure levels and distances)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <img src="../assets/images/fingerprint-processing.jpg" alt="Data Augmentation" class="img-full"/>
+    <p class="img-caption">Augmentation pipeline — original fingerprint images with blur, rotation, and scaling applied</p>
+  </div>
+
+  <hr/>
+
+  <!-- RESULTS -->
+  <div class="section">
+    <p class="section-label">Results</p>
+    <h2>Model Performance & Evaluation</h2>
+    <p>We evaluated four model configurations across two loss functions and two optimizers:</p>
+
+    <img src="../assets/images/fingerprint-table-1.png" alt="Hyperparameter Settings" class="img-full"/>
+    <p class="img-caption">Table 1: Hyperparameter configurations evaluated during model selection</p>
+
+    <img src="../assets/images/fingerprint-table-2.png" alt="Model Simulation Results" class="img-full"/>
+    <p class="img-caption">Table 2: Accuracy and loss comparison across optimizer and loss function combinations — ADAM + Binary Crossentropy wins</p>
+
+    <p>The winning configuration (ADAM + Binary Crossentropy) delivered:</p>
+    <ul>
+      <li><strong>96.72% classification accuracy</strong> on test fingerprints</li>
+      <li><strong>Training time:</strong> 6 minutes 29 seconds (20 epochs with early stopping)</li>
+      <li><strong>Inference speed:</strong> &lt;100ms per prediction — suitable for real-time lock operation</li>
+    </ul>
+
+    <img src="../assets/images/fingerprint-accuracy-results.png" alt="Accuracy and Loss Graph" class="img-full"/>
+    <p class="img-caption">Training and validation accuracy/loss curves — model converges cleanly without overfitting</p>
+
+    <h2>Prediction Output</h2>
+    <p>The system produces a binary output for any fingerprint input:</p>
+    <ul>
+      <li><strong>Match → "Success!!"</strong> — door unlocks</li>
+      <li><strong>No Match → "Fail!!"</strong> — user prompted to retry</li>
+    </ul>
+
+    <div class="img-grid">
+      <img src="../assets/images/fingerprint-results-sample.jpg" alt="Prediction Output"/>
+      <img src="../assets/images/fingerprint-data-sample.jpg" alt="Fingerprint Samples"/>
+    </div>
+    <p class="img-caption">Left: Program output for matched and unmatched fingerprint pairs — Right: Representative samples from the test set</p>
+
+    <div class="highlight">
+      <strong>Conclusion:</strong> The CNN method can reliably recognize fingerprint patterns in a door lock system with 96.72% accuracy — even with augmented inputs (blurred, rotated, scaled) — demonstrating strong real-world robustness.
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="section">
+    <p class="section-label">Future Work</p>
+    <h2>Recommendations & Extensions</h2>
+    <ul>
+      <li><strong>Hardware Integration:</strong> Deploy model on Raspberry Pi or ARM microcontroller for true IoT door lock operation</li>
+      <li><strong>Multi-Modal Biometrics:</strong> Combine fingerprint with facial recognition or iris scan for layered security</li>
+      <li><strong>Liveness Detection:</strong> Add anti-spoofing layer to detect fake fingerprints (printed photos, silicone molds)</li>
+      <li><strong>Privacy-First Storage:</strong> Store only encrypted fingerprint templates — never raw images</li>
+      <li><strong>Audit Logging:</strong> Log all access attempts with timestamps, confidence scores, and user IDs</li>
+      <li><strong>Continuous Learning:</strong> Retrain periodically as authorized user fingerprints evolve over time</li>
+    </ul>
+  </div>
+
+  <hr/>
+
+  <div class="section">
+    <p class="section-label">Tools Used</p>
+    <h2>Tech Stack</h2>
+    <div class="tools">
+      <span class="tool">Python</span><span class="tool">TensorFlow / Keras</span>
+      <span class="tool">OpenCV</span><span class="tool">NumPy</span>
+      <span class="tool">Matplotlib</span><span class="tool">SOCOFing Dataset</span>
+      <span class="tool">IoT / Raspberry Pi</span><span class="tool">CNN Architecture</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <a href="/">Christian Jauhari</a> — Jakarta, Indonesia</p>
+</footer>
+</body>
+</html>

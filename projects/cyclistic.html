@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cyclistic Bike-Share Analysis — Christian Jauhari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F0F8F5; --card: #fff; --accent: #1A9E7A; --accent2: #3BBFA0;
+      --text: #0F2D25; --muted: #6A8F84; --border: rgba(26,158,122,0.15);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);}
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;background:rgba(240,248,245,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--accent);letter-spacing:.08em;text-decoration:none;}
+    .back-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:var(--accent);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:0.85rem;transition:background .2s,transform .2s;}
+    .back-btn:hover{background:#0F6D50;transform:translateY(-1px);}
+    /* HERO */
+    .hero{margin-top:72px;position:relative;height:420px;overflow:hidden;display:flex;align-items:flex-end;}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top, rgba(15,45,37,0.92) 0%, rgba(15,45,37,0.4) 60%, transparent 100%);}
+    .hero-content{position:relative;z-index:1;padding:48px 60px;width:100%;}
+    .tag{display:inline-block;padding:5px 14px;background:rgba(26,158,122,0.25);border:1px solid rgba(26,158,122,0.4);border-radius:100px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#7EEFD0;margin-bottom:16px;}
+    .hero-content h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);text-transform:uppercase;letter-spacing:.03em;line-height:.95;color:#fff;margin-bottom:12px;}
+    .hero-content p{font-size:1.05rem;color:rgba(255,255,255,0.7);max-width:600px;}
+    /* CONTENT */
+    .content{max-width:860px;margin:0 auto;padding:72px 40px;}
+    /* STATS BAR */
+    .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:64px;}
+    .stat{background:var(--card);padding:28px 20px;text-align:center;}
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--accent);display:block;line-height:1;}
+    .stat-label{font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:6px;display:block;}
+    /* SECTIONS */
+    .section{margin-bottom:64px;}
+    .section-label{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+    h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text);margin-bottom:20px;line-height:1;}
+    p{font-size:.975rem;line-height:1.8;color:var(--muted);margin-bottom:14px;}
+    ul{margin:16px 0 16px 22px;color:var(--muted);line-height:1.85;}
+    li{margin-bottom:8px;}
+    li strong{color:var(--text);}
+    /* HIGHLIGHT */
+    .highlight{background:linear-gradient(135deg,#E4F4EF,#D0EDE7);border-left:4px solid var(--accent);padding:24px 28px;border-radius:10px;margin:28px 0;}
+    .highlight strong{color:var(--text);font-weight:700;}
+    /* IMAGES */
+    .img-full{width:100%;border-radius:12px;border:1px solid var(--border);margin:28px 0;display:block;}
+    .img-caption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:28px;font-style:italic;}
+    .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;}
+    .img-grid img{width:100%;border-radius:10px;border:1px solid var(--border);}
+    /* DIVIDER */
+    hr{border:none;border-top:1px solid var(--border);margin:48px 0;}
+    /* TOOLS */
+    .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+    .tool{padding:6px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:.82rem;font-weight:500;color:var(--muted);}
+    /* FOOTER */
+    footer{padding:40px 60px;background:#0F2D25;text-align:center;color:rgba(255,255,255,0.4);font-size:.85rem;}
+    footer a{color:var(--accent2);text-decoration:none;}
+    @media(max-width:768px){
+      nav{padding:14px 20px;} .hero-content{padding:32px 24px;} .content{padding:48px 24px;}
+      .stats-bar{grid-template-columns:repeat(2,1fr);} .img-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">CJ</a>
+  <a href="/" class="back-btn">← Back to Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="../assets/images/cyclistic-cover.jpg" alt="Cyclistic Bike-Share"/>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="tag">Data Analytics</span>
+    <h1>Cyclistic Bike-Share:<br/>Data Analysis</h1>
+    <p>Uncovering the behavioral gap between casual riders and members to drive conversion strategy.</p>
+  </div>
+</div>
+
+<div class="content">
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">258K</span><span class="stat-label">Trips Analyzed</span></div>
+    <div class="stat"><span class="stat-num">76%</span><span class="stat-label">Member Rides</span></div>
+    <div class="stat"><span class="stat-num">5PM</span><span class="stat-label">Peak Hour</span></div>
+    <div class="stat"><span class="stat-num">78%</span><span class="stat-label">Short Rides = Members</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section">
+    <p class="section-label">Overview</p>
+    <h2>The Business Challenge</h2>
+    <p>Cyclistic is a bike-share program with 5,800+ bicycles across 600 docking stations. The marketing team hypothesized that converting casual riders into annual members would maximize long-term profitability. My task: analyze one month of historical trip data to understand how casual and member riders differ — and recommend data-driven conversion strategies.</p>
+    <p>This is a capstone case study from the Google Data Analytics Certificate, where I acted as a junior analyst in Cyclistic's marketing analytics team.</p>
+    <div class="highlight">
+      <strong>Core Question:</strong> How do annual members and casual riders use Cyclistic bikes differently — and what does that tell us about how to convert casual riders into members?
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- PREPARE -->
+  <div class="section">
+    <p class="section-label">Phase 01</p>
+    <h2>Data Preparation</h2>
+    <p>I used Cyclistic's publicly available historical trip data, scoped to one month. The dataset included 13 columns across 258,678 ride records. My first step was understanding the data structure and assessing quality.</p>
+    <ul>
+      <li><strong>Removed:</strong> Duplicate trip IDs to ensure ride uniqueness</li>
+      <li><strong>Assessed:</strong> Missing station data — decided to retain records since station fields weren't essential for the primary analysis</li>
+      <li><strong>Engineered:</strong> Two new columns — <strong>ride_length</strong> (end time minus start time) and <strong>day_of_week</strong> (from start timestamp)</li>
+      <li><strong>Grouped:</strong> Ride lengths into 10-minute intervals for pattern analysis</li>
+      <li><strong>Tools:</strong> Excel and Power Query for all transformations</li>
+    </ul>
+    <p>The data columns included: ride ID, bicycle type, start/end timestamps, start/end station names, GPS coordinates, and user type (casual vs. member).</p>
+  </div>
+
+  <hr/>
+
+  <!-- ANALYSIS -->
+  <div class="section">
+    <p class="section-label">Phase 02</p>
+    <h2>Analysis & Key Findings</h2>
+
+    <img src="../assets/images/cyclistic-viz.png" alt="Cyclistic Data Visualization" class="img-full"/>
+    <p class="img-caption">Ride distribution and trend analysis across casual vs. member user segments</p>
+
+    <p>The 258,678-ride dataset revealed a clear behavioral split between the two user groups:</p>
+    <ul>
+      <li><strong>76%</strong> of all rides were taken by members; <strong>24%</strong> by casual riders</li>
+      <li>Casual riders had a <strong>higher average ride duration</strong> (30+ minutes) while members averaged 15-20 minutes</li>
+      <li><strong>99%</strong> of all rides lasted under 60 minutes; <strong>95.3%</strong> under 30 minutes</li>
+      <li><strong>66.5%</strong> of rides lasted under 10 minutes — and of those, <strong>78% were members</strong></li>
+    </ul>
+
+    <img src="../assets/images/cyclistic-dashboard.png" alt="Cyclistic Dashboard" class="img-full"/>
+    <p class="img-caption">Peak time and station usage analysis across the full month</p>
+
+    <h2>Peak Time Analysis</h2>
+    <ul>
+      <li><strong>Peak hour:</strong> 5 PM — accounts for 8.46% of total daily rides for both user types</li>
+      <li><strong>Peak day:</strong> Thursday — 13.1% of all weekly rides; heavily dominated by the 10-minute ride category</li>
+      <li><strong>Highest avg ride length by hour:</strong> 2 PM at 13.23 minutes per ride</li>
+      <li><strong>Highest avg ride length by day+hour:</strong> Tuesday at 2 AM — 21.25 min/ride, with 79% of those being casual riders</li>
+    </ul>
+
+    <h2>Station Analysis</h2>
+    <p>The most popular start and end stations were clustered around areas with high transit connectivity and tourist attractions. <strong>Clinton St & Washington Blvd</strong> ranked #1 for both starts and ends — located next to a major transit loop and near the Chicago River, making it attractive for both commuters and leisure riders.</p>
+    <div class="highlight">
+      <strong>Key Insight:</strong> Members ride frequently and short — classic commuting behavior. Casual riders ride longer and less often — classic leisure behavior. This is the foundation of the conversion strategy.
+    </div>
+  </div>
+
+  <hr/>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="section">
+    <p class="section-label">Phase 03</p>
+    <h2>Recommendations</h2>
+    <ul>
+      <li><strong>Create a 30-Minute Pass:</strong> Most rides are under 30 minutes. A "10 rides/week, up to 30 min each" membership tier directly targets casual rider behavior at a price point between day-pass and annual.</li>
+      <li><strong>Peak-Hour Promotions:</strong> Run targeted campaigns 3–6 PM when usage peaks, specifically promoting membership for commuting use cases.</li>
+      <li><strong>Referral System:</strong> Incentivize existing members to invite casual riders. Reward both parties to accelerate network growth.</li>
+      <li><strong>Station Infrastructure:</strong> Invest in facilities at the top-traffic stations (near transit and tourist spots) — that's where conversion opportunities are highest.</li>
+      <li><strong>Weekend & Low-Day Passes:</strong> Create special pricing for Sunday and Monday (lowest usage days) to build the habit of regular riding among casual users.</li>
+    </ul>
+    <div class="highlight">
+      <strong>Further Opportunity:</strong> If Cyclistic can link customer IDs to ride records, behavioral cohort analysis would unlock deeper conversion modeling — identifying which casual riders are most likely to convert and when.
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="section">
+    <p class="section-label">Tools Used</p>
+    <h2>Tech Stack</h2>
+    <div class="tools">
+      <span class="tool">Excel</span>
+      <span class="tool">Power Query</span>
+      <span class="tool">Data Visualization</span>
+      <span class="tool">Statistical Analysis</span>
+      <span class="tool">Google Data Analytics</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <a href="/">Christian Jauhari</a> — Jakarta, Indonesia</p>
+</footer>
+</body>
+</html>
