@@ -1,212 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Asian Option Pricing with ANN — Christian Jauhari</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root{--bg:#F0F8F5;--card:#fff;--accent:#4AAFCE;--accent2:#1A9E7A;--text:#0F2D25;--muted:#6A8F84;--border:rgba(74,175,206,0.15);}
+    :root { --bg:#F0F8F5;--card:#fff;--accent:#4AAFCE;--accent2:#3BBFA0;--accentg:#1A9E7A;--text:#0F2D25;--muted:#6A8F84;--secondary:#2E5A4A;--border:rgba(74,175,206,0.15); }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
     body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;background:rgba(240,248,245,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
-    .logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--accent2);letter-spacing:.08em;text-decoration:none;}
-    .back-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:var(--accent2);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:0.85rem;transition:background .2s,transform .2s;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;background:rgba(240,248,245,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(74,175,206,0.15);}
+    .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#1A9E7A;letter-spacing:0.08em;text-decoration:none;}
+    .back-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#1A9E7A;color:#fff;text-decoration:none;border-radius:8px;font-size:0.875rem;font-weight:600;transition:background .2s,transform .2s;}
     .back-btn:hover{background:#0F6D50;transform:translateY(-1px);}
-    .hero{margin-top:72px;position:relative;height:420px;overflow:hidden;display:flex;align-items:flex-end;}
+    .hero{margin-top:72px;height:480px;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
     .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,30,50,0.92) 0%,rgba(10,30,50,0.4) 60%,transparent 100%);}
-    .hero-content{position:relative;z-index:1;padding:48px 60px;width:100%;}
-    .tag{display:inline-block;padding:5px 14px;background:rgba(74,175,206,0.2);border:1px solid rgba(74,175,206,0.4);border-radius:100px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#7DD5EE;margin-bottom:16px;}
-    .hero-content h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);text-transform:uppercase;letter-spacing:.03em;line-height:.95;color:#fff;margin-bottom:12px;}
-    .hero-content p{font-size:1.05rem;color:rgba(255,255,255,0.7);max-width:600px;}
+    .hero-text{position:relative;z-index:1;padding:48px 60px;}
+    .hero-tag{display:inline-block;padding:4px 14px;background:#4AAFCE;color:#fff;border-radius:100px;font-size:0.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+    .hero-text h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);text-transform:uppercase;letter-spacing:0.02em;line-height:0.95;color:#fff;margin-bottom:12px;}
+    .hero-text p{font-size:1rem;color:rgba(255,255,255,0.7);max-width:560px;line-height:1.6;}
+    .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);background:#0A1E32;}
+    .stat{padding:28px;text-align:center;border-right:1px solid rgba(255,255,255,0.08);}
+    .stat:last-child{border-right:none;}
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#4AAFCE;display:block;line-height:1;margin-bottom:4px;}
+    .stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
     .content{max-width:860px;margin:0 auto;padding:72px 40px;}
-    .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:64px;}
-    .stat{background:var(--card);padding:28px 20px;text-align:center;}
-    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--accent);display:block;line-height:1;}
-    .stat-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-top:6px;display:block;}
-    .section{margin-bottom:64px;}
-    .section-label{font-size:.75rem;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
-    h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;text-transform:uppercase;letter-spacing:.04em;color:var(--text);margin-bottom:20px;line-height:1;}
-    p{font-size:.975rem;line-height:1.8;color:var(--muted);margin-bottom:14px;}
-    ul{margin:16px 0 16px 22px;color:var(--muted);line-height:1.85;}
-    li{margin-bottom:8px;}
-    li strong{color:var(--text);}
-    .highlight{background:linear-gradient(135deg,#D4EEF7,#C0E5F5);border-left:4px solid var(--accent);padding:24px 28px;border-radius:10px;margin:28px 0;}
-    .highlight strong{color:var(--text);font-weight:700;}
-    .img-full{width:100%;border-radius:12px;border:1px solid var(--border);margin:28px 0;display:block;}
-    .img-caption{font-size:.8rem;color:var(--muted);text-align:center;margin-top:-20px;margin-bottom:28px;font-style:italic;}
-    .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;}
-    .img-grid img{width:100%;border-radius:10px;border:1px solid var(--border);}
-    .img-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:28px 0;}
-    .img-grid-3 img{width:100%;border-radius:10px;border:1px solid var(--border);}
-    hr{border:none;border-top:1px solid var(--border);margin:48px 0;}
-    table{width:100%;border-collapse:collapse;margin:24px 0;font-size:.9rem;}
-    th{background:var(--accent);color:#fff;padding:12px 16px;text-align:left;font-weight:600;}
-    td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--muted);}
-    tr:hover td{background:rgba(74,175,206,0.05);}
-    .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
-    .tool{padding:6px 16px;background:var(--card);border:1px solid var(--border);border-radius:100px;font-size:.82rem;font-weight:500;color:var(--muted);}
-    footer{padding:40px 60px;background:#0F2D25;text-align:center;color:rgba(255,255,255,0.4);font-size:.85rem;}
-    footer a{color:#3BBFA0;text-decoration:none;}
-    @media(max-width:768px){
-      nav{padding:14px 20px;} .hero-content{padding:32px 24px;} .content{padding:48px 24px;}
-      .stats-bar{grid-template-columns:repeat(2,1fr);} .img-grid,.img-grid-3{grid-template-columns:1fr;}
-    }
+    .section-label{font-size:0.75rem;font-weight:700;color:#4AAFCE;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+    h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;text-transform:uppercase;letter-spacing:0.025em;color:var(--text);margin-bottom:20px;margin-top:56px;}
+    h2:first-of-type{margin-top:0;}
+    p{font-size:0.975rem;line-height:1.85;color:var(--muted);margin-bottom:16px;}
+    ul{margin:16px 0 16px 20px;color:var(--muted);line-height:1.85;}
+    li{margin-bottom:8px;font-size:0.975rem;}
+    li strong{color:var(--secondary);}
+    .highlight{background:#D4EEF7;border-left:4px solid #4AAFCE;padding:20px 24px;border-radius:0 10px 10px 0;margin:28px 0;}
+    .highlight strong{color:var(--text);font-weight:700;display:block;margin-bottom:6px;}
+    .highlight p{margin:0;color:var(--secondary);}
+    .img-block{margin:36px 0;border-radius:12px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 24px rgba(74,175,206,0.1);}
+    .img-block img{width:100%;display:block;}
+    .img-caption{padding:12px 16px;background:var(--card);font-size:0.8rem;color:var(--muted);font-style:italic;border-top:1px solid var(--border);}
+    .img-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:36px 0;}
+    .findings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:28px 0;}
+    .finding-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;}
+    .finding-card h4{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.04em;text-transform:uppercase;color:#4AAFCE;margin-bottom:8px;}
+    .finding-card p{font-size:0.875rem;color:var(--muted);margin:0;line-height:1.6;}
+    table{width:100%;border-collapse:collapse;margin:24px 0;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+    th{padding:14px 16px;text-align:left;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#D4EEF7;color:var(--secondary);}
+    td{padding:14px 16px;font-size:0.9rem;color:var(--muted);border-top:1px solid var(--border);}
+    td strong{color:var(--secondary);}
+    footer{padding:40px 60px;background:var(--text);}
+    .footer-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .footer-inner span{color:rgba(255,255,255,0.4);font-size:0.82rem;}
+    .footer-inner a{color:#3BBFA0;text-decoration:none;font-size:0.82rem;font-weight:600;}
+    @media(max-width:768px){nav{padding:14px 20px;}.hero-text{padding:32px 20px;}.content{padding:48px 20px;}.stats-bar{grid-template-columns:repeat(2,1fr);}.findings-grid,.img-row{grid-template-columns:1fr;}footer{padding:32px 20px;}}
   </style>
 </head>
 <body>
 <nav>
-  <a href="/" class="logo">CJ</a>
+  <a href="/" class="nav-logo">CJ</a>
   <a href="/" class="back-btn">← Back to Portfolio</a>
 </nav>
 
 <div class="hero">
-  <img src="../assets/images/ann-cover.jpg" alt="Asian Option Pricing"/>
+  <img src="../assets/images/ann-cover.jpg" alt="Asian Option Pricing" />
   <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <span class="tag">Machine Learning</span>
-    <h1>Asian Option Pricing<br/>with Artificial Neural Network</h1>
-    <p>A data-driven approach to financial derivatives pricing — 10-100x faster than traditional numerical methods.</p>
+  <div class="hero-text">
+    <span class="hero-tag">Machine Learning</span>
+    <h1>Asian Option Pricing<br/>with Neural Networks</h1>
+    <p>Replacing computationally expensive Monte Carlo methods with Artificial Neural Networks for real-time financial derivatives pricing.</p>
   </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">90%+</span><span class="stat-label">Prediction Accuracy</span></div>
+  <div class="stat"><span class="stat-num">100x</span><span class="stat-label">Faster than Monte Carlo</span></div>
+  <div class="stat"><span class="stat-num">3</span><span class="stat-label">Pricing Methods Compared</span></div>
+  <div class="stat"><span class="stat-num">~1.0</span><span class="stat-label">R² Score</span></div>
 </div>
 
 <div class="content">
-  <div class="stats-bar">
-    <div class="stat"><span class="stat-num">90%+</span><span class="stat-label">Model Accuracy</span></div>
-    <div class="stat"><span class="stat-num">100x</span><span class="stat-label">Speed vs Monte Carlo</span></div>
-    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Pricing Methods</span></div>
-    <div class="stat"><span class="stat-num">~1.0</span><span class="stat-label">R² Score</span></div>
+  <p class="section-label">Case Study</p>
+
+  <h2>The Problem</h2>
+  <p>Asian options are financial derivatives whose payoff depends on the <em>average asset price</em> over time rather than the final price at expiry. This makes them both attractive for hedging and notoriously difficult to price — no closed-form analytical solution exists.</p>
+  <p>Traditional numerical methods require thousands of simulations per price computation. For portfolios with thousands of option positions, this computational cost becomes prohibitive for real-time risk management.</p>
+
+  <div class="highlight">
+    <strong>Research Goal</strong>
+    <p>Build ANN models trained on three pricing methods that can predict Asian option prices with high accuracy and a fraction of the computational cost — enabling real-time pricing at scale.</p>
   </div>
 
-  <!-- OVERVIEW -->
-  <div class="section">
-    <p class="section-label">Overview</p>
-    <h2>The Problem with Asian Options</h2>
-    <p>Asian options are financial derivatives whose payoff depends on the <em>average</em> asset price over a set period — not just the final price. This averaging feature makes them complex to price: there's no analytical closed-form solution, so practitioners rely on computationally expensive numerical methods.</p>
-    <p>This project builds three Artificial Neural Network (ANN) models — each trained on data generated from a different pricing method — to replace those slow numerical computations with near-instant inference.</p>
-    <div class="highlight">
-      <strong>Core Insight:</strong> Once an ANN is trained, it can price thousands of options in milliseconds. The upfront training cost is a one-time expense; the inference speed benefit is permanent.
+  <h2>Asian Options — Background</h2>
+  <p>First developed by David Spaughton and Mark Standish at Bankers Trust, Asian options were originally designed to price oil commodity derivatives in Tokyo. The payoff is determined by the average asset price over the option's life — making them less susceptible to price manipulation near expiry.</p>
+  <p>Three pricing methods were used to generate training data for the ANN:</p>
+  <ul>
+    <li><strong>Levy's Approximation:</strong> A direct analytical approach that matches the first two moments of the arithmetic average using lognormal distribution</li>
+    <li><strong>Monte Carlo with Antithetic Variables:</strong> Variance reduction technique using paired random samples to simulate asset price paths</li>
+    <li><strong>Quasi-Monte Carlo (Sobol Series):</strong> Uses low-discrepancy sequences instead of random numbers to achieve better distribution coverage with fewer samples</li>
+  </ul>
+
+  <div class="img-block">
+    <img src="../assets/images/ann-input-layer.png" alt="Activation functions diagram" />
+    <div class="img-caption">Activation functions used in the ANN architecture — ReLU selected for optimal performance</div>
+  </div>
+
+  <h2>Neural Network Architecture</h2>
+  <p>The ANN takes option parameters as input (spot price S₀, strike price K, volatility σ, risk-free rate r, time-to-maturity T) and outputs the predicted option price. Three separate ANN models were trained — one per pricing method.</p>
+
+  <div class="findings-grid">
+    <div class="finding-card">
+      <h4>Hidden Layers</h4>
+      <p>2 hidden layers with 50 neurons each — determined through systematic hyperparameter search to minimize MSE.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Activation Function</h4>
+      <p>ReLU (Rectified Linear Unit) for non-linear mapping between input parameters and option price.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Optimizer</h4>
+      <p>ADAM (Adaptive Moment Estimation) — adapts learning rates per parameter for faster convergence.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Early Stopping</h4>
+      <p>Patience level of 5 epochs — prevents overfitting while maintaining generalization across option parameters.</p>
     </div>
   </div>
 
-  <hr/>
+  <h2>Data Processing</h2>
+  <p>Option parameters were randomly and uniformly generated to create a diverse training set. The data pipeline:</p>
+  <ul>
+    <li><strong>Generation:</strong> Option parameters sampled uniformly across realistic market ranges</li>
+    <li><strong>Pricing:</strong> Each parameter set priced using all three methods to create three separate target datasets</li>
+    <li><strong>Splitting:</strong> 80% training / 20% validation / 10% test</li>
+    <li><strong>Standardization:</strong> All inputs rescaled to mean=0, std=1 for stable gradient flow</li>
+  </ul>
 
-  <!-- ASIAN OPTIONS BACKGROUND -->
-  <div class="section">
-    <p class="section-label">Background</p>
-    <h2>Asian Options & Pricing Methods</h2>
-    <p>Asian options were first developed by David Spaughton and Mark Standish of Bankers Trust to price oil commodity options in Tokyo. They combine features of Asian and European options — the payoff is based on the average asset price and can only be exercised at maturity.</p>
-    <p>Three pricing methods were used to generate training data for the ANN:</p>
-    <ul>
-      <li><strong>Levy's Approximation:</strong> A direct analytical approach that approximates the arithmetic average distribution using lognormal moments. Fast, but limited to short-term options.</li>
-      <li><strong>Monte Carlo with Antithetic Variables:</strong> A variance reduction technique using paired random samples. Accurate but requires 10,000+ simulations per price.</li>
-      <li><strong>Quasi-Monte Carlo (Sobol Series):</strong> Uses low-discrepancy sequences instead of random numbers for better distribution coverage and faster convergence.</li>
-    </ul>
-
-    <img src="../assets/images/ann-input-layer.png" alt="ANN Input Layer Architecture" class="img-full"/>
-    <p class="img-caption">Activation function and ANN input layer structure</p>
+  <div class="img-row">
+    <div class="img-block" style="margin:0;">
+      <img src="../assets/images/ann-processing.png" alt="Data processing methodology" />
+      <div class="img-caption">Data processing pipeline</div>
+    </div>
+    <div class="img-block" style="margin:0;">
+      <img src="../assets/images/ann-table-1.png" alt="Data generation parameters" />
+      <div class="img-caption">Option parameter generation ranges</div>
+    </div>
   </div>
 
-  <hr/>
+  <h2>Hyperparameter Optimization</h2>
+  <p>A systematic search identified the optimal model configuration based on smallest Mean Squared Error (MSE) across validation sets. The optimized settings were consistent across all three ANN models.</p>
 
-  <!-- DATA & ARCHITECTURE -->
-  <div class="section">
-    <p class="section-label">Methodology</p>
-    <h2>Data Generation & Model Architecture</h2>
-    <p>Training data was generated by randomly sampling option parameter combinations and pricing each with all three methods. This produced three separate target datasets — one per ANN model.</p>
-
-    <img src="../assets/images/ann-processing.png" alt="Data Processing Methodology" class="img-full"/>
-    <p class="img-caption">End-to-end data processing pipeline for ANN model building</p>
-
-    <h2>Data Split & Preprocessing</h2>
-    <ul>
-      <li><strong>80%</strong> training / <strong>20%</strong> validation / <strong>10%</strong> testing</li>
-      <li>Standardization: all inputs scaled to mean=0, std=1</li>
-      <li>Input features: spot price (S₀), strike price (K), volatility (σ), risk-free rate (r), time-to-maturity (T)</li>
-    </ul>
-
-    <img src="../assets/images/ann-table-1.png" alt="Data Generation Parameters" class="img-full"/>
-    <p class="img-caption">Table 1: Parameter ranges used for synthetic data generation</p>
-
-    <h2>Optimal Hyperparameter Configuration</h2>
-    <ul>
-      <li><strong>Hidden Layers:</strong> 2 layers, 50 neurons each</li>
-      <li><strong>Activation:</strong> ReLU (Rectified Linear Unit)</li>
-      <li><strong>Optimizer:</strong> ADAM (Adaptive Moment Estimation)</li>
-      <li><strong>Loss Function:</strong> Mean Squared Error (MSE)</li>
-      <li><strong>Early Stopping:</strong> Patience = 5 epochs</li>
-    </ul>
-
-    <img src="../assets/images/ann-table-2.png" alt="Optimized Hyperparameter Settings" class="img-full"/>
-    <p class="img-caption">Table 2: Final optimized hyperparameter settings across all three ANN models</p>
+  <div class="img-block">
+    <img src="../assets/images/ann-table-2.png" alt="Optimized hyperparameter settings" />
+    <div class="img-caption">Optimized hyperparameter settings — consistent across all three pricing method models</div>
   </div>
 
-  <hr/>
+  <h2>Efficiency Analysis</h2>
+  <p>The core value proposition of ANN-based pricing is computational efficiency. The table below compares computation time across methods at different scales:</p>
 
-  <!-- RESULTS -->
-  <div class="section">
-    <p class="section-label">Results</p>
-    <h2>Efficiency & Accuracy Analysis</h2>
-
-    <img src="../assets/images/ann-table-3.png" alt="Efficiency Comparison" class="img-full"/>
-    <p class="img-caption">Table 3: Computation time comparison — ANN vs. all numerical methods at 100, 1K, and 10K prices</p>
-
-    <p>The ANN method's computation time is measured only during inference (not training). The advantage compounds significantly at scale:</p>
-    <table>
-      <tr><th>Method</th><th>100 prices</th><th>1,000 prices</th><th>10,000 prices</th></tr>
+  <table>
+    <thead><tr><th>Method</th><th>100 Prices</th><th>1,000 Prices</th><th>10,000 Prices</th></tr></thead>
+    <tbody>
       <tr><td><strong>ANN Model</strong></td><td><strong>~1ms</strong></td><td><strong>~12ms</strong></td><td><strong>~120ms</strong></td></tr>
       <tr><td>Levy Approximation</td><td>~5ms</td><td>~45ms</td><td>~450ms</td></tr>
       <tr><td>Quasi-Monte Carlo</td><td>~120ms</td><td>~1.2s</td><td>~12s</td></tr>
-      <tr><td>Monte Carlo (Antithetic)</td><td>~280ms</td><td>~2.8s</td><td>~28s</td></tr>
-    </table>
+      <tr><td>Monte Carlo</td><td>~280ms</td><td>~2.8s</td><td>~28s</td></tr>
+    </tbody>
+  </table>
 
-    <h2>Prediction Analysis</h2>
-    <img src="../assets/images/ann-table-4.png" alt="Prediction Input Parameters" class="img-full"/>
-    <p class="img-caption">Table 4: Input parameter set used for prediction validation</p>
+  <div class="img-block">
+    <img src="../assets/images/ann-table-3.png" alt="Efficiency analysis results" />
+    <div class="img-caption">Computation time comparison — ANN vs numerical methods at scale</div>
+  </div>
 
-    <img src="../assets/images/ann-table-5.png" alt="Prediction Results" class="img-full"/>
-    <p class="img-caption">Table 5: Option price predictions from all three ANN models vs. numerical methods — values converge near 1.6</p>
+  <h2>Prediction Results</h2>
+  <p>Prediction analysis was conducted using one set of input parameters tested across all three ANN models and compared against numerical method outputs:</p>
 
-    <div class="highlight">
-      <strong>Validation Result:</strong> All three ANN models produce option prices converging around 1.6, consistent with the numerical method benchmarks. The small divergence in Quasi-Monte Carlo results stems from non-optimal Sobol sequence generation — a known limitation noted in recommendations.
+  <div class="img-row">
+    <div class="img-block" style="margin:0;">
+      <img src="../assets/images/ann-table-4.png" alt="Prediction input" />
+      <div class="img-caption">Sample input parameters used for prediction analysis</div>
+    </div>
+    <div class="img-block" style="margin:0;">
+      <img src="../assets/images/ann-table-5.png" alt="Prediction results" />
+      <div class="img-caption">Option prices predicted by ANN vs. numerical methods</div>
     </div>
   </div>
 
-  <hr/>
+  <p>All three ANN models produced option prices close to the numerical benchmark of ~1.6. Predictions from Monte Carlo and Levy models were tightly clustered; the QMC model showed slight divergence due to suboptimal Sobol sequence generation in certain parameter ranges.</p>
 
-  <!-- CONCLUSIONS -->
-  <div class="section">
-    <p class="section-label">Conclusions</p>
-    <h2>Key Takeaways & Recommendations</h2>
-    <ul>
-      <li><strong>Effective Configuration:</strong> 2 hidden layers, 50 neurons, ReLU, ADAM, MSE, patience=5 produced the best accuracy/efficiency trade-off</li>
-      <li><strong>Computational Superiority:</strong> ANN inference is orders of magnitude faster than all numerical methods at scale</li>
-      <li><strong>QMC Improvement:</strong> Use Brownian Bridge Construction (2D Brownian motion) to improve Sobol sequence generation and reduce variance in QMC-trained models</li>
-      <li><strong>Levy Limitation:</strong> Levy approximation is limited to short-term options (T parameter assumed equal to T₂). Using real option market prices would improve model calibration</li>
-      <li><strong>Production Path:</strong> Deploy with TensorFlow Serving or ONNX Runtime for cross-platform real-time pricing</li>
-      <li><strong>Monitoring:</strong> Track prediction drift vs. market prices and retrain quarterly</li>
-    </ul>
+  <h2>Conclusions & Recommendations</h2>
+  <ul>
+    <li><strong>Optimal Architecture:</strong> 2 hidden layers × 50 neurons, ReLU activation, ADAM optimizer, patience=5 — effective across all three pricing methods</li>
+    <li><strong>Speed Advantage:</strong> ANN achieves 100x+ speedup over Monte Carlo for large-scale pricing without sacrificing meaningful accuracy</li>
+    <li><strong>Production Deployment:</strong> Export models to TensorFlow Serving or ONNX for cross-platform integration into trading systems</li>
+    <li><strong>QMC Improvement:</strong> Replace Sobol sequence generation with Brownian Bridge Construction (2D Brownian motion) to generate more diverse trajectories per sequence</li>
+    <li><strong>Model Monitoring:</strong> Implement drift detection to trigger retraining when market regimes shift significantly</li>
+    <li><strong>Explainability:</strong> Apply SHAP values to identify which option parameters most influence predicted prices — critical for regulatory compliance</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>Key Takeaway</strong>
+    <p>Neural networks don't replace numerical methods — they <em>learn from them</em>. Once trained, they reproduce high-accuracy prices at negligible compute cost. This makes real-time derivatives risk management practical at scale.</p>
   </div>
 
-  <hr/>
-
-  <div class="section">
-    <p class="section-label">Tools Used</p>
-    <h2>Tech Stack</h2>
-    <div class="tools">
-      <span class="tool">Python</span><span class="tool">TensorFlow / Keras</span>
-      <span class="tool">NumPy</span><span class="tool">SciPy</span>
-      <span class="tool">Pandas</span><span class="tool">Matplotlib</span>
-      <span class="tool">Monte Carlo Simulation</span><span class="tool">Quasi-Monte Carlo</span>
-    </div>
-  </div>
+  <p style="margin-top:40px;font-size:0.875rem;"><strong style="color:var(--secondary)">Tools Used:</strong> Python · TensorFlow / Keras · NumPy · SciPy · Pandas · Matplotlib</p>
 </div>
 
 <footer>
-  <p>© 2025 <a href="/">Christian Jauhari</a> — Jakarta, Indonesia</p>
+  <div class="footer-inner">
+    <span>© 2025 Christian Jauhari · Jakarta, Indonesia</span>
+    <a href="/">← Back to Portfolio</a>
+  </div>
 </footer>
 </body>
 </html>
