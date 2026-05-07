@@ -565,13 +565,41 @@ footer {
   .service-card p { font-size: 0.85rem; }
 
   /* ── PROCESS ── */
-  .process-steps { grid-template-columns: 1fr; gap: 32px; margin-top: 40px; }
-  .process-step { text-align: left; display: flex; align-items: flex-start; gap: 20px; padding: 0; }
-  .step-num { margin: 0; flex-shrink: 0; width: 48px; height: 48px; font-size: 0.85rem; }
-  .process-step:hover .step-num { background: var(--bg-card); border-color: rgba(26,158,122,0.3); color: var(--accent-1); }
-  .process-step div { flex: 1; }
-  .process-step h4 { font-size: 0.95rem; text-align: left; margin-bottom: 4px; }
-  .process-step p { font-size: 0.85rem; text-align: left; }
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 36px;
+  }
+  .process-steps::before { display: none; }
+  .process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: left;
+  }
+  .process-step:hover { transform: none; box-shadow: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: auto; height: auto;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-1);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    margin: 3px 0 0 0;
+    letter-spacing: 0.05em;
+  }
+  .process-step:hover .step-num { background: var(--accent-1); border-color: var(--accent-1); color: #fff; }
+  .step-content { flex: 1; }
+  .process-step h4 { font-size: 1rem; text-align: left; margin-bottom: 4px; }
+  .process-step p { font-size: 0.85rem; text-align: left; margin: 0; }
 
   /* ── STACK ── */
   .tools-grid { gap: 8px; margin-top: 32px; }
@@ -911,18 +939,24 @@ footer {
     <div class="process-steps">
       <div class="process-step reveal reveal-d1">
         <div class="step-num">01</div>
-        <h4>Discovery</h4>
-        <p>We align on your goals, data landscape, and success criteria in a focused 30-minute call.</p>
+        <div class="step-content">
+          <h4>Discovery</h4>
+          <p>We align on your goals, data landscape, and success criteria in a focused 30-minute call.</p>
+        </div>
       </div>
       <div class="process-step reveal reveal-d2">
         <div class="step-num">02</div>
-        <h4>Scoping</h4>
-        <p>A clear proposal with timeline, deliverables, and pricing — no surprises, ever.</p>
+        <div class="step-content">
+          <h4>Scoping</h4>
+          <p>A clear proposal with timeline, deliverables, and pricing — no surprises, ever.</p>
+        </div>
       </div>
       <div class="process-step reveal reveal-d3">
         <div class="step-num">03</div>
-        <h4>Build</h4>
-        <p>Iterative development with weekly check-ins. You see progress and give feedback throughout.</p>
+        <div class="step-content">
+          <h4>Build</h4>
+          <p>Iterative development with weekly check-ins. You see progress and give feedback throughout.</p>
+        </div>
       </div>
       <div class="process-step reveal reveal-d4">
         <div class="step-num">04</div>
