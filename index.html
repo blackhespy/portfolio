@@ -439,6 +439,9 @@ footer {
   .project-card--featured .project-cover { height: 260px; }
   .project-card--featured .project-body { padding: 28px 32px; }
   .project-card--featured .project-body h3 { font-size: 1.5rem; }
+  .project-card--wide { grid-template-columns: 1fr !important; }
+  .project-card--wide .project-cover { min-height: 220px !important; height: 220px !important; }
+  .project-card--wide .project-body { padding: 24px 20px !important; }
 
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .process-steps { grid-template-columns: repeat(2, 1fr); row-gap: 48px; }
@@ -875,6 +878,47 @@ footer {
 
       </div><!-- end right col -->
     </div><!-- end projects-layout -->
+
+    <!-- Apothecaria — Full Width Card -->
+    <div class="project-card project-card--wide reveal reveal-d4" onclick="location.href='projects/apothecaria.html'" style="margin-top:24px; display:grid; grid-template-columns:1fr 1fr; min-height:280px; cursor:pointer;">
+      <div class="project-cover" style="height:100%; min-height:260px;">
+        <img src="assets/images/apothecaria-dashboard.png" alt="Apothecaria Pharmacy System">
+        <div class="project-cover-overlay"></div>
+        <span class="project-tag" style="background:rgba(59,191,160,0.15);color:#3BBFA0;border:1px solid rgba(59,191,160,0.3);">Desktop App</span>
+        <div class="project-metric">
+          <div class="project-metric-val">6</div>
+          <div class="project-metric-label">Core modules</div>
+        </div>
+      </div>
+      <div class="project-body" style="padding:36px 40px; display:flex; flex-direction:column; justify-content:center;">
+        <div class="project-tech">
+          <span class="tech-chip">Electron</span>
+          <span class="tech-chip">React 18</span>
+          <span class="tech-chip">SQLite</span>
+          <span class="tech-chip">Offline-First</span>
+        </div>
+        <h3 style="font-size:1.6rem; margin:14px 0 10px;">Apothecaria — Pharmacy Management System</h3>
+        <p>A full-featured offline-first desktop application for Indonesian pharmacies. Built with Electron + React + SQLite — covers inventory, point-of-sale, stock mutations, cash flow, and margin analysis. Packaged as a Windows installer with zero internet dependency.</p>
+        <div class="project-stats" style="margin-top:16px;">
+          <div>
+            <div class="pstat-row">
+              <span class="pstat-label">Modules: Dashboard, POS, Inventory, Cash Flow, Mutations, Margin</span>
+              <span class="pstat-val">6</span>
+            </div>
+            <div class="pstat-bar"><div class="pstat-bar-fill" data-w="1.0"></div></div>
+          </div>
+          <div>
+            <div class="pstat-row">
+              <span class="pstat-label">Offline capability</span>
+              <span class="pstat-val">100%</span>
+            </div>
+            <div class="pstat-bar"><div class="pstat-bar-fill" data-w="1.0"></div></div>
+          </div>
+        </div>
+        <a href="projects/apothecaria.html" class="project-link" style="margin-top:20px;">View Full Case Study</a>
+      </div>
+    </div>
+
   </div>
 </section>
 

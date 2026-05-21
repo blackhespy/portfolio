@@ -1,0 +1,102 @@
+<svg width="800" height="460" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0C3B28"/>
+      <stop offset="100%" stop-color="#1A5C3A"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3BBFA0"/>
+      <stop offset="100%" stop-color="#2ECC8E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- BG -->
+  <rect width="800" height="460" fill="url(#bg)"/>
+
+  <!-- Subtle dot grid -->
+  <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="1" fill="white" opacity="0.06"/>
+  </pattern>
+  <rect width="800" height="460" fill="url(#dots)"/>
+
+  <!-- Glow blob -->
+  <ellipse cx="600" cy="200" rx="260" ry="200" fill="#3BBFA0" opacity="0.07"/>
+  <ellipse cx="150" cy="380" rx="180" ry="140" fill="#2ECC8E" opacity="0.05"/>
+
+  <!-- Top accent bar -->
+  <rect x="60" y="56" width="48" height="4" rx="2" fill="url(#accentGrad)"/>
+
+  <!-- Logo mark -->
+  <rect x="60" y="72" width="36" height="36" rx="8" fill="#3BBFA0" opacity="0.9"/>
+  <text x="78" y="96" text-anchor="middle" font-family="serif" font-size="18" font-weight="700" fill="white">A</text>
+
+  <!-- App name -->
+  <text x="108" y="88" font-family="'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="white" letter-spacing="0.5">Apothecaria</text>
+  <text x="108" y="104" font-family="'Segoe UI', sans-serif" font-size="10" fill="white" opacity="0.45" letter-spacing="2">PHARMACY MANAGEMENT SYSTEM</text>
+
+  <!-- Main headline -->
+  <text x="60" y="172" font-family="Georgia, serif" font-size="42" font-weight="700" fill="white" letter-spacing="-0.5">Offline-First</text>
+  <text x="60" y="222" font-family="Georgia, serif" font-size="42" font-weight="700" fill="url(#accentGrad)" letter-spacing="-0.5">Pharmacy Desktop App</text>
+  <text x="60" y="264" font-family="'Segoe UI', sans-serif" font-size="15" fill="white" opacity="0.55">Electron + React + SQLite · Windows Installer</text>
+
+  <!-- Feature pills -->
+  <rect x="60" y="294" width="100" height="26" rx="13" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="110" y="311" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.8">Dashboard</text>
+
+  <rect x="172" y="294" width="120" height="26" rx="13" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="232" y="311" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.8">Inventory POS</text>
+
+  <rect x="304" y="294" width="108" height="26" rx="13" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="358" y="311" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.8">Cash Flow</text>
+
+  <rect x="424" y="294" width="118" height="26" rx="13" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <text x="483" y="311" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.8">Margin Analysis</text>
+
+  <!-- Mock UI cards right side -->
+  <!-- Card 1 - stat -->
+  <rect x="470" y="60" width="155" height="88" rx="10" fill="url(#cardGrad)" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="486" y="84" font-family="'Segoe UI', sans-serif" font-size="9" fill="white" opacity="0.45" letter-spacing="1.5">INVENTORY VALUE</text>
+  <text x="486" y="116" font-family="Georgia, serif" font-size="24" font-weight="700" fill="white">Rp 36.1jt</text>
+  <text x="486" y="136" font-family="'Segoe UI', sans-serif" font-size="9" fill="#3BBFA0">based on COGS</text>
+
+  <!-- Card 2 - stat -->
+  <rect x="636" y="60" width="130" height="88" rx="10" fill="url(#cardGrad)" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="652" y="84" font-family="'Segoe UI', sans-serif" font-size="9" fill="white" opacity="0.45" letter-spacing="1.5">TOTAL SKU</text>
+  <text x="652" y="116" font-family="Georgia, serif" font-size="28" font-weight="700" fill="white">16</text>
+  <text x="652" y="136" font-family="'Segoe UI', sans-serif" font-size="9" fill="white" opacity="0.4">products listed</text>
+
+  <!-- Card 3 - mini chart -->
+  <rect x="470" y="162" width="296" height="140" rx="10" fill="url(#cardGrad)" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="486" y="184" font-family="'Segoe UI', sans-serif" font-size="9" fill="white" opacity="0.45" letter-spacing="1.5">CASH FLOW · 30 DAYS</text>
+  <!-- Chart bars -->
+  <rect x="490" y="238" width="18" height="44" rx="3" fill="#3BBFA0" opacity="0.7"/>
+  <rect x="514" y="252" width="18" height="30" rx="3" fill="#3BBFA0" opacity="0.5"/>
+  <rect x="538" y="220" width="18" height="62" rx="3" fill="#3BBFA0" opacity="0.8"/>
+  <rect x="562" y="244" width="18" height="38" rx="3" fill="#3BBFA0" opacity="0.6"/>
+  <rect x="586" y="232" width="18" height="50" rx="3" fill="#3BBFA0" opacity="0.9"/>
+  <rect x="610" y="248" width="18" height="34" rx="3" fill="#3BBFA0" opacity="0.5"/>
+  <rect x="634" y="216" width="18" height="66" rx="3" fill="#3BBFA0" opacity="1"/>
+  <rect x="658" y="236" width="18" height="46" rx="3" fill="#3BBFA0" opacity="0.6"/>
+  <rect x="682" y="226" width="18" height="56" rx="3" fill="#3BBFA0" opacity="0.75"/>
+  <rect x="706" y="242" width="18" height="40" rx="3" fill="#3BBFA0" opacity="0.55"/>
+  <rect x="730" y="210" width="18" height="72" rx="3" fill="#2ECC8E" opacity="1"/>
+  <!-- x axis -->
+  <line x1="486" y1="285" x2="756" y2="285" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- Bottom tag -->
+  <rect x="60" y="400" width="130" height="24" rx="5" fill="#3BBFA0" fill-opacity="0.2"/>
+  <text x="125" y="416" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="#3BBFA0" font-weight="600">Desktop Application</text>
+
+  <rect x="202" y="400" width="100" height="24" rx="5" fill="white" fill-opacity="0.08"/>
+  <text x="252" y="416" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.6">Electron 29</text>
+
+  <rect x="314" y="400" width="80" height="24" rx="5" fill="white" fill-opacity="0.08"/>
+  <text x="354" y="416" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.6">React 18</text>
+
+  <rect x="406" y="400" width="80" height="24" rx="5" fill="white" fill-opacity="0.08"/>
+  <text x="446" y="416" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="11" fill="white" opacity="0.6">SQLite</text>
+</svg>
